@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { QRCodeCanvas } from 'qrcode.react';
 import { Link } from 'react-router-dom';
 
 function OpenHouseList() {
@@ -24,69 +23,45 @@ function OpenHouseList() {
 
   return (
     <div>
-      <h2>Your Open Houses</h2>
       {openHouses.length === 0 ? (
-        <p>No open houses created yet.</p>
+        <p className="text-gray-300">No open houses available. Add one!</p>
       ) : (
         <ul>
           {openHouses.map((house) => (
             <li
               key={house._id}
-              style={{
-                marginBottom: '20px',
-                border: '1px solid #ccc',
-                padding: '15px',
-                borderRadius: '8px',
-              }}
+              className="bg-gray-700 p-6 rounded-lg shadow-md mb-6 text-white"
             >
-              <div>
-                <strong>Address:</strong> {house.address} <br />
-                <strong>Description:</strong> {house.description} <br />
-                <strong>Form Link:</strong>{' '}
-                <a
-                  href={`http://localhost:3000/form/${house._id}`}
-                  target="_blank"
-                  rel="noreferrer"
+              <h3 className="text-2xl font-bold text-blue-300 mb-2">{house.address}</h3>
+              <p className="text-gray-300 mb-4">{house.description}</p>
+
+              <div className="flex space-x-4">
+                {/* Link to Visitor List */}
+                <Link
+                  to={`/openhouses/${house._id}/visitors`}
+                  className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg"
                 >
-                  Visitor Form
-                </a>
-              </div>
-
-              {/* QR Code */}
-              <div style={{ marginTop: '10px' }}>
-                <strong>QR Code:</strong>
-                <QRCodeCanvas
-                  value={`http://localhost:3000/form/${house._id}`}
-                  size={128}
-                />
-              </div>
-
-              {/* Manage Visitors Link */}
-              <div style={{ marginTop: '10px' }}>
-                <Link to={`/openhouses/${house._id}/visitors`}>
-                  Manage Visitors
+                  View Visitors
                 </Link>
-              </div>
 
-              {/* Customize Template */}
-              <div style={{ marginTop: '10px' }}>
-                <Link to={`/openhouses/${house._id}/template`}>
+                {/* Link to Customize Template */}
+                <Link
+                  to={`/openhouses/${house._id}/template`}
+                  className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg"
+                >
                   Customize Template
                 </Link>
-              </div>
 
-              {/* View Template Link */}
-              {house.template && house.template.companyLogo && (
-                <div style={{ marginTop: '10px' }}>
+                {/* Link to View Template */}
+                {house.template && house.template.companyLogo && (
                   <Link
                     to={`/templates/${house._id}`}
-                    target="_blank"
-                    rel="noreferrer"
+                    className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg"
                   >
                     View Template
                   </Link>
-                </div>
-              )}
+                )}
+              </div>
             </li>
           ))}
         </ul>

@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import Layout from '../components/Layout';
 
-function VisitorList({ openHouseId }) {
+function ManageVisitors() {
+  const { id: openHouseId } = useParams();
   const [visitors, setVisitors] = useState([]);
-  const [editVisitor, setEditVisitor] = useState(null);
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '', feedback: '' });
 
-  // Fetch Visitors
   const fetchVisitors = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -23,97 +23,38 @@ function VisitorList({ openHouseId }) {
     fetchVisitors();
   }, [openHouseId]);
 
-  // Handle Edit Input Change
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  // Submit Edit
-  const handleEdit = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      await axios.put(`http://localhost:5000/api/visitors/${editVisitor._id}`, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      alert('Visitor updated successfully!');
-      setEditVisitor(null);
-      fetchVisitors();
-    } catch (err) {
-      console.error('Error updating visitor:', err.message);
-    }
-  };
-
-  // Delete Visitor
-  const handleDelete = async (visitorId) => {
-    try {
-      const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:5000/api/visitors/${visitorId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      alert('Visitor deleted successfully!');
-      fetchVisitors();
-    } catch (err) {
-      console.error('Error deleting visitor:', err.message);
-    }
-  };
-
   return (
-    <div>
-      <h2>Visitor List</h2>
-      {visitors.length === 0 ? (
-        <p>No visitors yet.</p>
-      ) : (
-        <ul>
-          {visitors.map((visitor) => (
-            <li key={visitor._id}>
-              <strong>Name:</strong> {visitor.name} <br />
-              <strong>Email:</strong> {visitor.email} <br />
-              <strong>Phone:</strong> {visitor.phone} <br />
-              <strong>Feedback:</strong> {visitor.feedback} <br />
-              <button onClick={() => setEditVisitor(visitor)}>Edit</button>
-              <button onClick={() => handleDelete(visitor._id)}>Delete</button>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {/* Edit Form */}
-      {editVisitor && (
-        <div>
-          <h3>Edit Visitor</h3>
-          <input
-            type="text"
-            name="name"
-            placeholder="Name"
-            defaultValue={editVisitor.name}
-            onChange={handleChange}
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            defaultValue={editVisitor.email}
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="phone"
-            placeholder="Phone"
-            defaultValue={editVisitor.phone}
-            onChange={handleChange}
-          />
-          <textarea
-            name="feedback"
-            placeholder="Feedback"
-            defaultValue={editVisitor.feedback}
-            onChange={handleChange}
-          />
-          <button onClick={handleEdit}>Save</button>
-          <button onClick={() => setEditVisitor(null)}>Cancel</button>
-        </div>
-      )}
-    </div>
+    <Layout>
+      <div className="bg-gray-800 p-8 rounded-lg shadow-lg">
+        <h2 className="text-2xl font-bold text-blue-400 mb-4">Visitors</h2>
+        {visitors.length === 0 ? (
+          <p>No visitors found.</p>
+        ) : (
+          <ul>
+            {visitors.map((visitor) => (
+              <li
+                key={visitor._id}
+                className="bg-gray-700 p-4 rounded-lg shadow-md mb-4"
+              >
+                <p>
+                  <strong>Name:</strong> {visitor.name}
+                </p>
+                <p>
+                  <strong>Email:</strong> {visitor.email}
+                </p>
+                <p>
+                  <strong>Phone:</strong> {visitor.phone || 'N/A'}
+                </p>
+                <p>
+                  <strong>Feedback:</strong> {visitor.feedback || 'N/A'}
+                </p>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </Layout>
   );
 }
 
-export default VisitorList;
+export default ManageVisitors;

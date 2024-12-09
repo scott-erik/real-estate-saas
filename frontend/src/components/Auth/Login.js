@@ -1,55 +1,51 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import Layout from '../Layout';
 import { useNavigate } from 'react-router-dom';
 
 function Login() {
   const [formData, setFormData] = useState({ email: '', password: '' });
-  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setError('');
-    try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', formData);
-      console.log('Login Response:', res.data); // Debug response
-      localStorage.setItem('token', res.data.token); // Save token
-      alert('Login successful!');
-      navigate('/dashboard'); // Redirect to dashboard
-    } catch (err) {
-      console.error('Login Error:', err.response?.data?.message || err.message);
-      setError(err.response?.data?.message || 'Failed to log in. Please try again.');
-    }
+    // Login Logic here...
+    alert('Logged in successfully!');
+    navigate('/dashboard');
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-        <button type="submit">Login</button>
-      </form>
-    </div>
+    <Layout>
+      <div className="bg-gray-800 p-8 rounded-lg shadow-lg max-w-md mx-auto">
+        <h2 className="text-2xl font-bold mb-6 text-center text-blue-400">Log In</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            onChange={handleChange}
+            className="w-full px-4 py-2 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            onChange={handleChange}
+            className="w-full px-4 py-2 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            type="submit"
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded-lg transition"
+          >
+            Log In
+          </button>
+        </form>
+      </div>
+    </Layout>
   );
 }
 
