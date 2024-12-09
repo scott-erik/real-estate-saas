@@ -30,12 +30,24 @@ function OpenHouseList() {
       ) : (
         <ul>
           {openHouses.map((house) => (
-            <li key={house._id} style={{ marginBottom: '20px' }}>
+            <li
+              key={house._id}
+              style={{
+                marginBottom: '20px',
+                border: '1px solid #ccc',
+                padding: '15px',
+                borderRadius: '8px',
+              }}
+            >
               <div>
                 <strong>Address:</strong> {house.address} <br />
                 <strong>Description:</strong> {house.description} <br />
                 <strong>Form Link:</strong>{' '}
-                <a href={`http://localhost:3000/form/${house._id}`} target="_blank" rel="noreferrer">
+                <a
+                  href={`http://localhost:3000/form/${house._id}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   Visitor Form
                 </a>
               </div>
@@ -43,13 +55,38 @@ function OpenHouseList() {
               {/* QR Code */}
               <div style={{ marginTop: '10px' }}>
                 <strong>QR Code:</strong>
-                <QRCodeCanvas value={`http://localhost:3000/form/${house._id}`} size={128} />
+                <QRCodeCanvas
+                  value={`http://localhost:3000/form/${house._id}`}
+                  size={128}
+                />
               </div>
 
               {/* Manage Visitors Link */}
               <div style={{ marginTop: '10px' }}>
-                <Link to={`/openhouses/${house._id}/visitors`}>Manage Visitors</Link>
+                <Link to={`/openhouses/${house._id}/visitors`}>
+                  Manage Visitors
+                </Link>
               </div>
+
+              {/* Customize Template */}
+              <div style={{ marginTop: '10px' }}>
+                <Link to={`/openhouses/${house._id}/template`}>
+                  Customize Template
+                </Link>
+              </div>
+
+              {/* View Template Link */}
+              {house.template && house.template.companyLogo && (
+                <div style={{ marginTop: '10px' }}>
+                  <Link
+                    to={`/templates/${house._id}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    View Template
+                  </Link>
+                </div>
+              )}
             </li>
           ))}
         </ul>

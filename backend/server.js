@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -14,7 +15,7 @@ app.use(express.json());
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/openhouses', require('./routes/openHouseRoutes'));
 app.use('/api/visitors', require('./routes/visitorRoutes'));
-
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Database Connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected'))

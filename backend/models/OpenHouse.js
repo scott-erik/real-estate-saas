@@ -5,6 +5,11 @@ const OpenHouseSchema = new mongoose.Schema({
   address: String,
   description: String,
   formLink: String,
+  template: {
+    contactInfo: { type: String },
+    companyLogo: { type: String }, // Store URL to the uploaded logo
+    qrCodeLink: { type: String },
+  },
   visitors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Visitor' }],
 });
 
