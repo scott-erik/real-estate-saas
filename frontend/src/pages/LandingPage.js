@@ -7,7 +7,7 @@ function LandingPage() {
       {/* Hero Section */}
       <header className="flex flex-col items-center justify-center text-center flex-grow px-6">
         <h1 className="text-6xl font-bold mb-4">
-          Welcome to <span className="text-blue-500">OpenHousePro</span>
+          Welcome to <span className="text-blue-500">Erik HomePro</span>
         </h1>
         <p className="text-xl max-w-2xl mb-8">
           Streamline your open house management with customizable templates, visitor tracking, and modern tools designed for real estate agents.
@@ -32,7 +32,7 @@ function LandingPage() {
 
       {/* Footer */}
       <footer className="text-center py-4 text-gray-400">
-        <p>© {new Date().getFullYear()} OpenHousePro. All rights reserved.</p>
+        <p>© {new Date().getFullYear()} Erik Home Pro. All rights reserved.</p>
       </footer>
     </div>
   );
