@@ -1,16 +1,15 @@
 const mongoose = require('mongoose');
 
 const OpenHouseSchema = new mongoose.Schema({
-  agentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Agent' },
-  address: String,
-  description: String,
-  formLink: String,
+  address: { type: String, required: true },
+  description: { type: String, required: true },
   template: {
     contactInfo: { type: String },
-    companyLogo: { type: String }, // Store URL to the uploaded logo
+    companyLogo: { type: String },
     qrCodeLink: { type: String },
   },
-  visitors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Visitor' }],
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Reference to User
+  createdAt: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model('OpenHouse', OpenHouseSchema);

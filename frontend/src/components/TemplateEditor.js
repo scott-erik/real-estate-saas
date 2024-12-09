@@ -1,28 +1,59 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function TemplateEditor() {
   const { id: openHouseId } = useParams();
   const [templateData, setTemplateData] = useState({
     contactInfo: '',
     companyLogo: null, // For file upload
+    qrCodeLink: '',    // Added from second block
   });
   const navigate = useNavigate();
 
+  // Fetch Existing Template Data
+  useEffect(() => {
+    const fetchTemplate = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const res = await axios.get(`http://localhost:5000/api/openhouses`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const openHouse = res.data.find((house) => house._id === openHouseId);
+        if (openHouse.template) {
+          setTemplateData({
+            contactInfo: openHouse.template.contactInfo || '',
+            companyLogo: openHouse.template.companyLogo || '',
+            qrCodeLink: openHouse.template.qrCodeLink || '', // Include qrCodeLink
+          });
+        }
+      } catch (err) {
+        console.error('Error fetching template data:', err.message);
+      }
+    };
+
+    fetchTemplate();
+  }, [openHouseId]);
+
+  // Handle Input Changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setTemplateData({ ...templateData, [name]: value });
   };
 
+  // Handle File Upload Change
   const handleFileChange = (e) => {
     setTemplateData({ ...templateData, companyLogo: e.target.files[0] });
   };
 
-  const handleSave = async () => {
+  // Save Template Data
+  const handleSave = async (e) => {
+    e.preventDefault();
     try {
       const token = localStorage.getItem('token');
       const formData = new FormData();
+
       formData.append('contactInfo', templateData.contactInfo);
       if (templateData.companyLogo) {
         formData.append('companyLogo', templateData.companyLogo);
@@ -39,7 +70,7 @@ function TemplateEditor() {
         }
       );
 
-      alert('Template saved successfully!');
+      alert('Template updated successfully!');
       navigate('/dashboard');
     } catch (err) {
       console.error('Error saving template:', err.message);
@@ -48,20 +79,54 @@ function TemplateEditor() {
   };
 
   return (
-    <div>
-      <h2>Customize Template</h2>
-      <label>Contact Information:</label>
-      <textarea
-        name="contactInfo"
-        value={templateData.contactInfo}
-        onChange={handleChange}
-        placeholder="Enter your contact information here"
-      />
+    <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
+      <div className="bg-gray-800 p-8 rounded-lg shadow-lg max-w-lg w-full">
+        <h2 className="text-2xl font-bold mb-6 text-blue-400">Customize Template</h2>
+        <form onSubmit={handleSave} className="space-y-4">
+          {/* Contact Information */}
+          <label className="block">
+            Contact Information:
+            <textarea
+              name="contactInfo"
+              placeholder="Enter your contact information"
+              value={templateData.contactInfo}
+              onChange={handleChange}
+              className="w-full px-4 py-2 mt-2 rounded-lg bg-gray-700"
+            />
+          </label>
 
-      <label>Company Logo:</label>
-      <input type="file" accept="image/*" onChange={handleFileChange} />
+          {/* Company Logo Upload */}
+          <label className="block">
+            Company Logo:
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="w-full px-4 py-2 mt-2 bg-gray-700 text-white"
+            />
+          </label>
 
-      <button onClick={handleSave}>Save Template</button>
+          {/* Display QR Code Link */}
+          <label className="block">
+            QR Code Link:
+            <input
+              type="text"
+              name="qrCodeLink"
+              value={templateData.qrCodeLink}
+              onChange={handleChange}
+              disabled
+              className="w-full px-4 py-2 mt-2 rounded-lg bg-gray-600 text-gray-400"
+            />
+          </label>
+
+          <button
+            type="submit"
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded-lg"
+          >
+            Save Template
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
