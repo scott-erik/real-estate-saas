@@ -36,7 +36,7 @@ function Dashboard() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token'); // Clear the token
+    localStorage.removeItem('token');
     navigate('/'); // Redirect to landing page
   };
 
@@ -82,7 +82,7 @@ function Dashboard() {
         </form>
 
         {/* Open Houses List */}
-        <OpenHouseList />
+        <OpenHouseList navigate={navigate} />
       </div>
     </Layout>
   );

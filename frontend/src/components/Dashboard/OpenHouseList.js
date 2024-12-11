@@ -147,6 +147,14 @@ function OpenHouseList() {
                   >
                     View Visitors
                   </Link>
+
+                  {/* Customize Visitor Form */}
+                  <Link
+                    to={`/openhouses/${house._id}/customize-visitor-form`}
+                    className="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-lg"
+                  >
+                    Customize Visitor Form
+                  </Link>
                 </div>
               </div>
             )}

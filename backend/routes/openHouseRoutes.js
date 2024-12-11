@@ -223,6 +223,71 @@ router.put('/:id/template', protect, async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+// PUT: Update Custom Fields for an Open House
+router.put('/:id/customfields', protect, async (req, res) => {
+  const { customFields } = req.body;
 
+  try {
+    const openHouse = await OpenHouse.findById(req.params.id);
+
+    if (!openHouse) {
+      return res.status(404).json({ message: 'Open House not found.' });
+    }
+
+    // Check ownership
+    if (openHouse.user.toString() !== req.user) {
+      return res.status(403).json({ message: 'Not authorized to update this Open House.' });
+    }
+
+    // Update custom fields
+    openHouse.customFields = customFields || openHouse.customFields;
+    const updatedOpenHouse = await openHouse.save();
+
+    res.status(200).json({ message: 'Custom fields updated successfully.', updatedOpenHouse });
+  } catch (error) {
+    console.error('Error updating custom fields:', error.message);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+// GET: Fetch Custom Fields for an Open House
+router.get('/:id/customfields', protect, async (req, res) => {
+  try {
+    const openHouse = await OpenHouse.findById(req.params.id);
+
+    if (!openHouse) {
+      return res.status(404).json({ message: 'Open House not found.' });
+    }
+
+    res.status(200).json({ customFields: openHouse.customFields || [] });
+  } catch (error) {
+    console.error('Error fetching custom fields:', error.message);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+// POST: Save Visitor Submission for an Open House
+router.post('/:id/visitors', async (req, res) => {
+  const { name, email, phone, feedback, ...customFields } = req.body;
+
+  try {
+    const openHouse = await OpenHouse.findById(req.params.id);
+    if (!openHouse) {
+      return res.status(404).json({ message: 'Open House not found.' });
+    }
+
+    // Initialize the visitors array if it doesn't exist
+    if (!openHouse.visitors) openHouse.visitors = [];
+
+    // Save the visitor data
+    const visitorData = { name, email, phone, feedback, customFields, submittedAt: new Date() };
+    openHouse.visitors.push(visitorData);
+
+    await openHouse.save();
+    res.status(201).json({ message: 'Visitor data saved successfully.', visitorData });
+  } catch (error) {
+    console.error('Error saving visitor data:', error.message);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
 
 module.exports = router;

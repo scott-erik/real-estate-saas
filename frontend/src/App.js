@@ -8,6 +8,7 @@ import ManageVisitors from './pages/ManageVisitors'; // Import the ManageVisitor
 import TemplateEditor from './components/TemplateEditor';
 import TemplateView from './pages/TemplateView';
 import LandingPage from './pages/LandingPage';
+import CustomizeVisitorForm from './pages/CustomizeVisitorForm';
 
 function App() {
   return (
@@ -23,6 +24,8 @@ function App() {
       <Route path="/openhouses/:id/template" element={<TemplateEditor />} />
       <Route path="/templates/:id" element={<TemplateView />} />
       <Route path="/openhouses/:id/visitors" element={<ManageVisitors />} />
+      <Route path="/openhouses/:id/customize-visitor-form" element={<CustomizeVisitorForm />} />
+      <Route path="/openhouses/:id/visitorform" element={<VisitorForm />} />
     </Routes>
   );
 }
