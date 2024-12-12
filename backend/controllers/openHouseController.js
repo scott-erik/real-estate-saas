@@ -1,23 +1,20 @@
-const OpenHouse = require('../models/OpenHouse');
+const CLIENT_URL = process.env.CLIENT_URL || 'https://yourapp.com';
 
 exports.createOpenHouse = async (req, res) => {
   const { address, description } = req.body;
 
   try {
-    // Create a new Open House document
     const newOpenHouse = new OpenHouse({
       agentId: req.user.id,
       address,
       description,
     });
 
-    // Save the new Open House to generate the `_id`
     await newOpenHouse.save();
 
-    // Update the formLink with the Open House's _id
-    newOpenHouse.formLink = `https://yourapp.com/form/${newOpenHouse._id}`;
+    // Generate the correct QR code link
+    newOpenHouse.formLink = `${CLIENT_URL}/form/${newOpenHouse._id}`;
 
-    // Save the updated Open House with the formLink
     await newOpenHouse.save();
 
     res.status(201).json(newOpenHouse);
