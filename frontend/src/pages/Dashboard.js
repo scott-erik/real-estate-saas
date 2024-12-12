@@ -21,12 +21,14 @@ function Dashboard() {
       const res = await axios.get(`${API_URL}/api/openhouses`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      console.log('Fetched Open Houses:', res.data); // Debug log
       setOpenHouses(res.data);
     } catch (error) {
-      console.error('Error fetching Open Houses:', error.message);
+      console.error('Error fetching Open Houses:', error.response?.data || error.message);
     }
   };
 
+  // Fetch data on component mount
   useEffect(() => {
     fetchOpenHouses();
   }, []);
@@ -45,14 +47,21 @@ function Dashboard() {
       const res = await axios.post(`${API_URL}/api/openhouses`, newOpenHouse, {
         headers: { Authorization: `Bearer ${token}` },
       });
+  
+      console.log('Created Open House:', res.data); // Debug log
       alert('Open House created successfully!');
-      setOpenHouses((prev) => [...prev, res.data]); // Append new Open House to state
+  
+      // Re-fetch the updated list to ensure consistency
+      fetchOpenHouses();
+  
+      // Clear the form
       setNewOpenHouse({ address: '', description: '' });
     } catch (err) {
-      console.error('Error creating Open House:', err.message);
+      console.error('Error creating Open House:', err.response?.data || err.message);
       alert('Failed to create Open House.');
     }
   };
+  
 
   const handleLogout = () => {
     localStorage.removeItem('token');

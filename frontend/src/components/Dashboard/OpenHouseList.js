@@ -4,37 +4,12 @@ import { Link } from 'react-router-dom';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-function OpenHouseList({ newOpenHouse }) {
-  const [openHouses, setOpenHouses] = useState([]);
+function OpenHouseList({ openHouses, setOpenHouses }) {
   const [editingHouse, setEditingHouse] = useState(null);
   const [editForm, setEditForm] = useState({
     address: '',
     description: '',
   });
-
-  // Fetch Open Houses
-  const fetchOpenHouses = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const res = await axios.get(`${API_URL}/api/openhouses`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setOpenHouses(res.data);
-    } catch (error) {
-      console.error('Error fetching Open Houses:', error.response?.data || error.message);
-    }
-  };
-
-  useEffect(() => {
-    fetchOpenHouses();
-  }, []);
-
-  // Effect to update the list when a new open house is added
-  useEffect(() => {
-    if (newOpenHouse) {
-      setOpenHouses((prev) => [...prev, newOpenHouse]);
-    }
-  }, [newOpenHouse]);
 
   // Delete Open House
   const handleDelete = async (id) => {
@@ -43,7 +18,8 @@ function OpenHouseList({ newOpenHouse }) {
       await axios.delete(`${API_URL}/api/openhouses/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      // Update state instead of refetching
+
+      // Remove the deleted house from state
       setOpenHouses((prev) => prev.filter((house) => house._id !== id));
       alert('Open House deleted successfully!');
     } catch (error) {
@@ -57,21 +33,22 @@ function OpenHouseList({ newOpenHouse }) {
     setEditForm({ address: house.address, description: house.description });
   };
 
+  // Save Edited Open House
   const handleSave = async () => {
     try {
       const token = localStorage.getItem('token');
       const res = await axios.put(`${API_URL}/api/openhouses/${editingHouse}`, editForm, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      alert('Open House updated successfully!');
 
-      // Update state directly
+      // Update the house in the state
       setOpenHouses((prev) =>
         prev.map((house) =>
           house._id === editingHouse ? { ...house, ...res.data } : house
         )
       );
       setEditingHouse(null);
+      alert('Open House updated successfully!');
     } catch (error) {
       console.error('Error updating Open House:', error.response?.data || error.message);
     }
@@ -83,10 +60,7 @@ function OpenHouseList({ newOpenHouse }) {
         <p className="text-gray-400 text-center">No open houses available. Add one!</p>
       ) : (
         openHouses.map((house) => (
-          <div
-            key={house._id}
-            className="bg-gray-700 p-4 sm:p-6 rounded-lg shadow-md mb-6"
-          >
+          <div key={house._id} className="bg-gray-700 p-4 sm:p-6 rounded-lg shadow-md mb-6">
             {editingHouse === house._id ? (
               <div>
                 <input
