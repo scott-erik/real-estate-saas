@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
+const API_URL = process.env.REACT_APP_API_URL;
 function TemplateEditor() {
   const { id: openHouseId } = useParams();
   const [templateData, setTemplateData] = useState({
@@ -16,7 +16,7 @@ function TemplateEditor() {
     const fetchTemplate = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get(`http://localhost:5000/api/openhouses`, {
+        const res = await axios.get(`${API_URL}/api/openhouses`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -60,7 +60,7 @@ function TemplateEditor() {
       }
 
       await axios.put(
-        `http://localhost:5000/api/openhouses/${openHouseId}/template`,
+        `${API_URL}/api/openhouses/${openHouseId}/template`,
         formData,
         {
           headers: {

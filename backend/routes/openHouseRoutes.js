@@ -4,6 +4,7 @@ const OpenHouse = require('../models/OpenHouse');
 const multer = require('multer');
 const path = require('path');
 const protect = require('../middleware/authMiddleware'); // Import protect middleware
+const CLIENT_URL = process.env.CLIENT_URL;
 // Configure Multer Storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -111,7 +112,7 @@ router.put('/:id/template', upload.single('companyLogo'), uploadErrorHandler, as
     openHouse.template = {
       contactInfo: contactInfo || openHouse.template?.contactInfo,
       companyLogo: companyLogoPath,
-      qrCodeLink: `http://localhost:3000/form/${req.params.id}`,
+      qrCodeLink: `${CLIENT_URL}/form/${req.params.id}`,
     };
 
     await openHouse.save();

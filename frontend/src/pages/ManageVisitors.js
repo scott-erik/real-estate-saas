@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import Layout from '../components/Layout';
-
+const API_URL = process.env.REACT_APP_API_URL;
 function ManageVisitors() {
   const { id: openHouseId } = useParams();
   const [visitors, setVisitors] = useState([]);
@@ -18,7 +18,7 @@ function ManageVisitors() {
   const fetchVisitors = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get(`http://localhost:5000/api/visitors/${openHouseId}`, {
+      const res = await axios.get(`${API_URL}/api/visitors/${openHouseId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setVisitors(res.data);
@@ -52,7 +52,7 @@ function ManageVisitors() {
     try {
       const token = localStorage.getItem('token');
       await axios.put(
-        `http://localhost:5000/api/visitors/${editingVisitor}`,
+        `${API_URL}/api/visitors/${editingVisitor}`,
         formData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -68,7 +68,7 @@ function ManageVisitors() {
   const handleDelete = async (visitorId) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:5000/api/visitors/${visitorId}`, {
+      await axios.delete(`${API_URL}/api/visitors/${visitorId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       alert('Visitor deleted successfully!');
@@ -83,7 +83,7 @@ function ManageVisitors() {
     try {
       const token = localStorage.getItem('token');
       const res = await axios.get(
-        `http://localhost:5000/api/visitors/${openHouseId}/export`,
+        `${API_URL}/api/visitors/${openHouseId}/export`,
         {
           headers: { Authorization: `Bearer ${token}` },
           responseType: 'blob', // To handle file download

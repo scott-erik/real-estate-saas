@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../Layout';
 import axios from 'axios';
-
+const API_URL = process.env.REACT_APP_API_URL;
 function Register() {
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });
   const [error, setError] = useState('');
@@ -17,7 +17,7 @@ function Register() {
     e.preventDefault();
     try {
       // Send registration data to backend
-      const res = await axios.post('http://localhost:5000/api/auth/register', formData);
+      const res = await axios.post(`${API_URL}/api/auth/register`, formData);
 
       // Store token or user data (if applicable)
       localStorage.setItem('token', res.data.token); // Assume token is returned from backend

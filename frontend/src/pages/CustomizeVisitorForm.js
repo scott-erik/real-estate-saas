@@ -8,12 +8,12 @@ function CustomizeVisitorForm() {
   const { id: openHouseId } = useParams();
   const [customFields, setCustomFields] = useState([]);
   const [fieldName, setFieldName] = useState('');
-
+  const API_URL = process.env.REACT_APP_API_URL;
   useEffect(() => {
     const fetchCustomFields = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get(`http://localhost:5000/api/openhouses/${openHouseId}/customfields`, {
+        const res = await axios.get(`${API_URL}/api/openhouses/${openHouseId}/customfields`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setCustomFields(res.data.customFields || []);
@@ -35,7 +35,7 @@ function CustomizeVisitorForm() {
     try {
       const token = localStorage.getItem('token');
       await axios.put(
-        `http://localhost:5000/api/openhouses/${openHouseId}/customfields`,
+        `${API_URL}/api/openhouses/${openHouseId}/customfields`,
         { customFields },
         { headers: { Authorization: `Bearer ${token}` } }
       );

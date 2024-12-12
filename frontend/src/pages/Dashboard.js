@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
 import OpenHouseList from '../components/Dashboard/OpenHouseList';
 import axios from 'axios';
-
+const API_URL = process.env.REACT_APP_API_URL;
 function Dashboard() {
   const navigate = useNavigate();
 
@@ -22,7 +22,7 @@ function Dashboard() {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        'http://localhost:5000/api/openhouses',
+        `${API_URL}/api/openhouses`,
         newOpenHouse,
         { headers: { Authorization: `Bearer ${token}` } }
       );

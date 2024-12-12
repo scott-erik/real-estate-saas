@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Layout from '../Layout';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
+const API_URL = process.env.REACT_APP_API_URL;
 function Login() {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState(''); // State for error messages
@@ -13,19 +13,22 @@ function Login() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      // API call to authenticate user
-      const res = await axios.post('http://localhost:5000/api/auth/login', formData);
-      localStorage.setItem('token', res.data.token); // Overwrite any existing token
-      alert('Logged in successfully!');
-      navigate('/dashboard'); // Redirect to dashboard
-    } catch (err) {
-      console.error('Login failed:', err.message);
-      setError('Invalid email or password.');
-    }
-  };
+  const API_URL = process.env.REACT_APP_API_URL;
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    // API call to authenticate user
+    const res = await axios.post(`${API_URL}/api/auth/login`, formData);
+    localStorage.setItem('token', res.data.token); // Overwrite any existing token
+    alert('Logged in successfully!');
+    navigate('/dashboard'); // Redirect to dashboard
+  } catch (err) {
+    console.error('Login failed:', err.message);
+    setError('Invalid email or password.');
+  }
+};
+
 
   return (
     <Layout>

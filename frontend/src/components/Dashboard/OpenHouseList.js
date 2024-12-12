@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-
+const API_URL = process.env.REACT_APP_API_URL;
 function OpenHouseList() {
   const [openHouses, setOpenHouses] = useState([]);
   const [editingHouse, setEditingHouse] = useState(null);
@@ -14,7 +14,7 @@ function OpenHouseList() {
   const fetchOpenHouses = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get('http://localhost:5000/api/openhouses', {
+      const res = await axios.get(`${API_URL}/api/openhouses`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setOpenHouses(res.data);
@@ -31,7 +31,7 @@ function OpenHouseList() {
   const handleDelete = async (id) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:5000/api/openhouses/${id}`, {
+      await axios.delete(`${API_URL}/api/openhouses/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setOpenHouses((prev) => prev.filter((house) => house._id !== id));
@@ -51,7 +51,7 @@ function OpenHouseList() {
     try {
       const token = localStorage.getItem('token');
       await axios.put(
-        `http://localhost:5000/api/openhouses/${editingHouse}`,
+        `${API_URL}/api/openhouses/${editingHouse}`,
         editForm,
         { headers: { Authorization: `Bearer ${token}` } }
       );

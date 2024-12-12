@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-
+const API_URL = process.env.REACT_APP_API_URL;
 function VisitorList() {
   const { id: openHouseId } = useParams();
   const [visitors, setVisitors] = useState([]);
@@ -11,7 +11,7 @@ function VisitorList() {
       try {
         const token = localStorage.getItem('token');
         const res = await axios.get(
-          `http://localhost:5000/api/visitors/${openHouseId}`,
+          `${API_URL}/api/visitors/${openHouseId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setVisitors(res.data || []);

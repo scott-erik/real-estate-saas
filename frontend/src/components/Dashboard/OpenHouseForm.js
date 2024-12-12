@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
+const API_URL = process.env.REACT_APP_API_URL;
 function OpenHouseForm() {
   const [data, setData] = useState({ address: '', description: '' });
 
@@ -14,7 +14,7 @@ function OpenHouseForm() {
     console.log('Token being sent:', token); // Debug the token
   
     try {
-      const res = await axios.post('http://localhost:5000/api/openhouses', data, {
+      const res = await axios.post(`${API_URL}/api/openhouses`, data, {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log('Response:', res.data);

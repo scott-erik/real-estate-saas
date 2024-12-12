@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-
+const API_URL = process.env.REACT_APP_API_URL;
 function TemplateView() {
   const { id: openHouseId } = useParams();
   const [template, setTemplate] = useState({
@@ -16,7 +16,7 @@ function TemplateView() {
     const fetchTemplate = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get(`http://localhost:5000/api/openhouses`, {
+        const res = await axios.get(`${API_URL}/api/openhouses`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const openHouse = res.data.find((house) => house._id === openHouseId);
