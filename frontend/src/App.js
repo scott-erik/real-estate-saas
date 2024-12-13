@@ -26,6 +26,7 @@ function App() {
       <Route path="/openhouses/:id/visitors" element={<ManageVisitors />} />
       <Route path="/openhouses/:id/customize-visitor-form" element={<CustomizeVisitorForm />} />
       <Route path="/openhouses/:id/visitorform" element={<VisitorForm />} />
+
     </Routes>
   );
 }

@@ -19,14 +19,12 @@ app.use('/api/visitors', require('./routes/visitorRoutes'));
 // Static folder for file uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Root Route for Testing API
-app.get('/', (req, res) => {
-  res.send('API is running...');
-});
+// Serve React static files
+app.use(express.static(path.join(__dirname, '../frontend/build')));
 
-// Catch-all route for invalid API endpoints
-app.use((req, res) => {
-  res.status(404).json({ message: 'API endpoint not found.' });
+// Catch-all route to serve React index.html for non-API routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
 });
 
 // Database Connection
