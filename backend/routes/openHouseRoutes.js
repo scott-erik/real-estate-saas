@@ -112,7 +112,7 @@ router.put('/:id/template', upload.single('companyLogo'), uploadErrorHandler, as
     openHouse.template = {
       contactInfo: contactInfo || openHouse.template?.contactInfo,
       companyLogo: companyLogoPath,
-      qrCodeLink: `${CLIENT_URL}/form/${req.params.id}`,
+      qrCodeLink: `${CLIENT_URL}/openhouses/${openHouse._id}/visitorform`,
     };
 
     await openHouse.save();

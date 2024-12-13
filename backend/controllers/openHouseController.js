@@ -1,5 +1,5 @@
-const CLIENT_URL = process.env.CLIENT_URL || 'https://yourapp.com';
-
+// const CLIENT_URL = process.env.CLIENT_URL || 'https://yourapp.com';
+const OpenHouse = require('../models/OpenHouse');
 exports.createOpenHouse = async (req, res) => {
   const { address, description } = req.body;
 
@@ -12,8 +12,11 @@ exports.createOpenHouse = async (req, res) => {
 
     await newOpenHouse.save();
 
-    // Generate the correct QR code link
-    newOpenHouse.formLink = `${CLIENT_URL}/form/${newOpenHouse._id}`;
+     // Generate the formLink using the unique _id
+     const CLIENT_URL = process.env.CLIENT_URL || 'https://real-estate-saas-front.onrender.com';
+     newOpenHouse.template = {
+       qrCodeLink: `${CLIENT_URL}/openhouses/${newOpenHouse._id}/visitorform`,
+     };
 
     await newOpenHouse.save();
 

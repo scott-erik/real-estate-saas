@@ -20,7 +20,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/form/:id" element={<VisitorForm />} />
+      {/* <Route path="/form/:id" element={<VisitorForm />} /> */}
       <Route path="/openhouses/:id/template" element={<TemplateEditor />} />
       <Route path="/templates/:id" element={<TemplateView />} />
       <Route path="/openhouses/:id/visitors" element={<ManageVisitors />} />
